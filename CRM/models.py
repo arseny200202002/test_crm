@@ -75,7 +75,7 @@ class Models3D(BaseModel):
     marketplace_link = models.URLField(default=None, blank=True, verbose_name="Маркетплейс")
 
     def manufacturing_price(self):
-        return float("{:.2f}".format(self.plastic_type.ppg() * self.weight))
+        return int(self.plastic_type.ppg() * self.weight)
     manufacturing_price.short_description = "Себесстоимость, руб."
 
 

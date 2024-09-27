@@ -50,7 +50,5 @@ class TgMessageText(models.Model):
     class Meta:
         verbose_name = "Текст сообщения"
         verbose_name_plural = "Тексты сообщений"
-        unique_together = (
-            "group",
-            "event",
-        )
+
+
