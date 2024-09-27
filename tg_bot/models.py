@@ -5,6 +5,7 @@ from django.db import models
 
 class Events(models.TextChoices):
     modelAdded = "3dModelAdded", "Добавлена новая модель"
+    orderAdded = "OrderAdded", "Создан новый заказ"
     photosAddedToModel = "photosAddedToModel", "Добавлены фото к модели"
     testPrintStatusChanged = "testPrintStatusChanged", "Статус тестовой печати изменен"
 
@@ -42,7 +43,6 @@ class TgMessageText(models.Model):
         choices=Events.choices,
     )
     text = models.TextField(verbose_name="Текст сообщения")
-    created_at=models.DateTimeField(verbose_name="Время отправки",auto_created=True)
 
     def __str__(self):
         return self.text
@@ -50,5 +50,7 @@ class TgMessageText(models.Model):
     class Meta:
         verbose_name = "Текст сообщения"
         verbose_name_plural = "Тексты сообщений"
-
-
+        unique_together = (
+            "group",
+            "event",
+        )

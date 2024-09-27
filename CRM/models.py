@@ -3,9 +3,12 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
+import logging
+import os
 
 from tg_bot.models import Events
 from tg_bot.utils import notify_all_groups_about_event
+
 
 COLORS = (
     ("black", "черный"),
@@ -114,6 +117,7 @@ class Printer(BaseModel):
         verbose_name="Принтер"
         verbose_name_plural="Принтеры"
 
+
 class Order(BaseModel):
     model=models.ForeignKey(to=Models3D, on_delete=models.CASCADE, verbose_name="Модель")
     quantity=models.IntegerField(verbose_name="Количество", default=1)
@@ -156,23 +160,26 @@ class Order(BaseModel):
 
 @receiver(pre_save, sender=Models3D)
 def handle_pre_save(sender, instance: Models3D, **kwargs):
-    """Ловит изменения в полях и отправляет уведомления"""
+    """
+    Ловит изменения в полях и отправляет уведомления
+    """
     obj = sender.objects.filter(pk=instance.pk).first()
     if obj is None:
         return
+    
     link = reverse("admin:CRM_models3d_change", args=[instance.pk])
+
     if not obj.photo == instance.photo:  # Field has changed
         notify_all_groups_about_event(
             Events.photosAddedToModel,
             details={"admin_link": f"{settings.BASE_URL}{link}"},
         )
-        print('photo field has changed')
     if not obj.test_print == instance.test_print:  # Field has changed
         notify_all_groups_about_event(
             Events.testPrintStatusChanged,
             details={"admin_link": f"{settings.BASE_URL}{link}"},
         )
-        print('test_print field has changed')
+        
 
 
 @receiver(post_save, sender=Models3D)
@@ -181,6 +188,29 @@ def handle_post_save(sender, instance: Models3D, created, **kwargs):
     # на post save чтобы был pk
     if created:
         link = reverse("admin:CRM_models3d_change", args=[instance.pk])
+        notify_all_groups_about_event(
+            Events.modelAdded, details={"admin_link": f"{settings.BASE_URL}{link}"}
+        )
+
+
+@receiver(post_save, sender=Order)
+def handle_post_save(sender, instance: Order, created, **kwargs):
+    """Ловит создание нового заказа"""
+    # на post save чтобы был pk
+    if created:
+
+        """
+        # Меняем кол-во оставшегося пластика
+        plastic_type = instance.model.plastic_type
+
+        if instance.total_weight() <= plastic_type.weight_in_stock:
+            plastic_type.weight_in_stock -= instance.total_weight()
+        else:
+            if plastic_type.spools_in_stock > 0:
+                pla
+        """
+                
+        link = reverse("admin:CRM_order_change", args=[instance.pk])
         notify_all_groups_about_event(
             Events.modelAdded, details={"admin_link": f"{settings.BASE_URL}{link}"}
         )

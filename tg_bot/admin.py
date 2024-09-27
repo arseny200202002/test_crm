@@ -13,7 +13,7 @@ class TgGroupAdmin(admin.ModelAdmin):
 
 @admin.register(TgMessageText)
 class TgMessageTextAdmin(admin.ModelAdmin):
-    list_display = ("group", "event", "text","created_at")
-    search_fields = ("group__group_name", "event", "text","created_at")
+    list_display = ("group", "event", "text")
+    search_fields = ("group__group_name", "event", "text")
     list_filter = ("event", "group")
 
