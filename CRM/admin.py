@@ -50,9 +50,9 @@ class Models3DAdmin(admin.ModelAdmin):
     photo_download.short_description = 'Скачать архив'
     
     fields = ['name', 'plastic_type', 'link', 'file3mf', 'weight', 'manufacturing_price', 'revenue', 'price', 'test_print', 'photo', 'image_tag', 'zip_photo', 'marketplace_link']
-    list_display = ['id', 'name', 'plastic_type', 'link_url', 'model_download', 'weight', 'manufacturing_price', 'revenue', 'price', 'test_print', 'image_tag', 'photo_download', 'marketplace_url']
+    list_display = ['id', 'name', 'plastic_type', 'photo', 'link_url', 'model_download', 'weight', 'manufacturing_price', 'revenue', 'price', 'test_print', 'image_tag', 'photo_download', 'marketplace_url']
     readonly_fields = ['price', 'manufacturing_price', 'image_tag']
-    list_editable=[]
+    list_editable=['photo','test_print']
 
 
 @admin.register(Printer)

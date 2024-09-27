@@ -42,6 +42,7 @@ class TgMessageText(models.Model):
         choices=Events.choices,
     )
     text = models.TextField(verbose_name="Текст сообщения")
+    created_at=models.DateTimeField(verbose_name="Время отправки",auto_created=True)
 
     def __str__(self):
         return self.text

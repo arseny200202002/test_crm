@@ -166,11 +166,13 @@ def handle_pre_save(sender, instance: Models3D, **kwargs):
             Events.photosAddedToModel,
             details={"admin_link": f"{settings.BASE_URL}{link}"},
         )
+        print('photo field has changed')
     if not obj.test_print == instance.test_print:  # Field has changed
         notify_all_groups_about_event(
             Events.testPrintStatusChanged,
             details={"admin_link": f"{settings.BASE_URL}{link}"},
         )
+        print('test_print field has changed')
 
 
 @receiver(post_save, sender=Models3D)
