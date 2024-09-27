@@ -1,0 +1,14 @@
+version: "2.3"
+
+services:
+  django-crm:
+    container_name: SNAIL_SLICE_CRM
+    build: .
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - .:/usr/src/crm
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+
