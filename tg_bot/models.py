@@ -23,6 +23,7 @@ class TgGroup(models.Model):
     def get_text_for_event(self, event, details: Optional[dict] = None) -> Optional[str]:
         """Получить текст сообщения для события"""
         msg = self.tgmessagetext_set.filter(event=event).first()  # type: ignore
+        
         if not msg:
             return None
         if not details:

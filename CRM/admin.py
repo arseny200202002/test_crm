@@ -69,6 +69,13 @@ class OrderAdmin(admin.ModelAdmin):
     #    return obj.model.plastic_type
     #model_plastic_type.short_description = 'Тип пластика'
 
+    def link_url(self, obj):
+        self.verbose_name = 'obj._meta.verbose_name'
+        url = obj.link
+        site = obj.link.split('/')[2]
+        return mark_safe(f'<a target="_blank" href="{url}" rel="nofollow">{site}</a>')
+    link_url.short_description = 'Ссылка на заказ'
+
     fields=['model', 'quantity', 'printer']
     list_display=['id','model','quantity','printer','total_weight','manufacturing_price','total_price','plastic_in_stock','net_profit','wage']
     readonly_fields=[]

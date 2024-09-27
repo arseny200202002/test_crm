@@ -1,11 +1,16 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-8$^ibd9rvz6lusxhd59nw*tgp3jh$wbjdvzus0q(@ybde#mz!#'
+
+BASE_URL =      os.environ.get("BASE_URL")
+TG_API_TOKEN =  os.environ.get("TG_API_TOKEN")
+SECRET_KEY =    os.environ.get("SECRET_KEY")
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
@@ -111,7 +116,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
-
-
-BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:8000")
-TG_API_TOKEN = os.environ.get("TG_API_TOKEN", "8195617183:AAGaorI6smzGQN5V9ey1p1WHg6T3HsyEnFo")

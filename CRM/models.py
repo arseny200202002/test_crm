@@ -182,35 +182,23 @@ def handle_pre_save(sender, instance: Models3D, **kwargs):
         
 
 
+@receiver(post_save, sender=Order)
+def handle_create_order(sender, instance: Order, created, **kwargs):
+    """Ловит создание нового заказа"""
+    # на post save чтобы был pk
+    if created:                
+        link = reverse("admin:CRM_order_change", args=[instance.pk])
+        notify_all_groups_about_event(
+            Events.orderAdded, details={"admin_link": f"{settings.BASE_URL}{link}"}
+        )
+
+
 @receiver(post_save, sender=Models3D)
-def handle_post_save(sender, instance: Models3D, created, **kwargs):
+def handle_create_model(sender, instance: Models3D, created, **kwargs):
     """Ловит создание новой модели"""
     # на post save чтобы был pk
     if created:
         link = reverse("admin:CRM_models3d_change", args=[instance.pk])
-        notify_all_groups_about_event(
-            Events.modelAdded, details={"admin_link": f"{settings.BASE_URL}{link}"}
-        )
-
-
-@receiver(post_save, sender=Order)
-def handle_post_save(sender, instance: Order, created, **kwargs):
-    """Ловит создание нового заказа"""
-    # на post save чтобы был pk
-    if created:
-
-        """
-        # Меняем кол-во оставшегося пластика
-        plastic_type = instance.model.plastic_type
-
-        if instance.total_weight() <= plastic_type.weight_in_stock:
-            plastic_type.weight_in_stock -= instance.total_weight()
-        else:
-            if plastic_type.spools_in_stock > 0:
-                pla
-        """
-                
-        link = reverse("admin:CRM_order_change", args=[instance.pk])
         notify_all_groups_about_event(
             Events.modelAdded, details={"admin_link": f"{settings.BASE_URL}{link}"}
         )
