@@ -1,10 +1,8 @@
-version: "2.3"
-
 services:
   django-crm:
     container_name: SNAIL_SLICE_CRM
     build: .
-    command: python manage.py runserver 0.0.0.0:8080
+    command: gunicorn SnailCRM.wsgi --bind=0.0.0.0:8080
     volumes:
       - .:/usr/src/crm
     ports:
